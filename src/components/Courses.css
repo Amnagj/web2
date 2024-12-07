@@ -1,0 +1,119 @@
+/* General page styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9; /* Light background color */
+}
+
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #98c2db; /* Keep header color */
+  border-radius: 10px;
+  color: #fff;
+}
+
+.logo h1 {
+  font-size: 2rem;
+  font-family: cursive;
+  color: rgb(61, 61, 127);
+}
+
+.nav ul {
+  display: flex;
+  list-style-type: none;
+  gap: 30px;
+  padding-right: 40px;
+  padding-top: 10px;
+}
+
+.nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.nav ul li a:hover {
+  color: #ddd;
+}
+
+/* Course section styles */
+.courses {
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #f2f2f2; /* Lighter background for course section */
+}
+
+.courses h2 {
+  font-size: 38px;
+  margin-bottom: 40px;
+  color: #004080;
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.course-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  flex-wrap: wrap;
+  
+}
+
+.course {
+  background-color: #e1f0f8; /* Soft, light blue background for course cards */
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  margin-bottom: 30px;
+}
+
+.course img {
+  width: 100%;
+  height: 200px; /* Fixed height for all images */
+  object-fit: cover; /* Ensures images fill the container without distortion */
+  border-radius: 8px;
+}
+
+.course h3 {
+  font-size: 1.7rem;
+  color: rgb(61, 61, 127);
+  margin-top: 15px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.course p {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 15px 0;
+}
+
+.course .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #79a7c5; /* Soft button color */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.course .btn:hover {
+  background-color: #5d8c9f; /* Darker button color on hover */
+}
+
+/* Hover effect for course cards */
+.course:hover {
+  transform: translateY(-10px);
+}
+

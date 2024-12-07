@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #98c2db;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.logo h1 {
+  font-size: 2rem;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(61, 61, 127);
+}
+
+
+.nav ul {
+  display: flex;
+  list-style-type: none;
+  gap: 30px;
+  padding-right: 40px;
+  padding-top: 10px;
+}
+
+.nav ul li button,
+.nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.nav ul li button:hover,
+.nav ul li a:hover {
+  color: #ddd;
+}
+.nav ul li button {
+  background-color: #98c2db;
+  border: none;
+  cursor: pointer;
+}
