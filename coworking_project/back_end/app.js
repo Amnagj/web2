@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import authRoute from "./route/auth.js";
+import roomRoute from "./route/roomRoutes.js";
+
 
 import usersRoute from "./route/user.js";
 import cookieParser from "cookie-parser";
@@ -35,6 +38,8 @@ app.use(cors());
 
 
 app.use("/api/user", usersRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/rooms", roomRoute);
 
 
 app.use((err, req, res, next) => {
@@ -48,7 +53,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3000, () => {
+app.listen(4000, () => {
   connect();
   console.log("Connected to backend.");
 });

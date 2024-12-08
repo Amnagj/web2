@@ -1,0 +1,33 @@
+.available-rooms-page {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .selected {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  button {
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .booking-confirmation {
+    margin-top: 20px;
+  }
+  
+  .cancel-button {
+    background-color: #dc3545;
+  }
+  
+  .cancel-button:hover {
+    background-color: #c82333;
+  }
+  

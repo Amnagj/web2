@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Updated to use useNavigate
 import './MeetingRoomForm.css';
 
 function MeetingRoomForm() {
-  const [peopleCount, setPeopleCount] = useState(3); // État pour le compteur
-  const [selectedDate, setSelectedDate] = useState(''); // État pour la date
-  const [startTime, setStartTime] = useState('09:00'); // État pour l'heure de début
-  const [endTime, setEndTime] = useState('10:00'); // État pour l'heure de fin
+  const [peopleCount, setPeopleCount] = useState(3);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [startTime, setStartTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('10:00');
+  const [workspaceType, setWorkspaceType] = useState('Meeting room');
+  const [availabilityMessage, setAvailabilityMessage] = useState(null);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
-  // Gestion du compteur
-  const incrementPeople = () => {
-    setPeopleCount((prev) => prev + 1);
-  };
+  // Counter handlers
+  const incrementPeople = () => setPeopleCount((prev) => prev + 1);
+  const decrementPeople = () => peopleCount > 1 && setPeopleCount((prev) => prev - 1);
 
-  const decrementPeople = () => {
-    if (peopleCount > 1) {
-      setPeopleCount((prev) => prev - 1);
-    }
-  };
-
-  // Gestion des limites de l'heure
+  // Time handlers
   const handleStartTimeChange = (e) => {
     const newStartTime = e.target.value;
     setStartTime(newStartTime);
-
-    // Ajuster l'heure de fin si elle est inférieure à l'heure de début
     if (newStartTime > endTime) {
       setEndTime(newStartTime);
     }
@@ -31,10 +27,34 @@ function MeetingRoomForm() {
 
   const handleEndTimeChange = (e) => {
     const newEndTime = e.target.value;
-
-    // Assurez-vous que l'heure de fin reste après l'heure de début
     if (newEndTime >= startTime) {
       setEndTime(newEndTime);
+    }
+  };
+
+  // Search button handler
+  const handleSearch = async () => {
+    if (!selectedDate || !startTime || !endTime) {
+      setAvailabilityMessage('Please fill in all required fields.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('/rooms/check-availability', {
+        type: workspaceType,
+        date: selectedDate,
+        startTime,
+        endTime,
+      });
+
+      if (response.data.available) {
+        navigate('/available-rooms', { state: { rooms: response.data.rooms } }); // Use navigate to move to available rooms page
+      } else {
+        setAvailabilityMessage('No rooms are available at this time.');
+      }
+    } catch (error) {
+      setAvailabilityMessage('An error occurred while checking availability.');
+      console.error(error);
     }
   };
 
@@ -51,7 +71,11 @@ function MeetingRoomForm() {
 
       <div className="form-group">
         <label>Type of workspace*</label>
-        <select className="select-input">
+        <select
+          className="select-input"
+          value={workspaceType}
+          onChange={(e) => setWorkspaceType(e.target.value)}
+        >
           <option>Meeting room</option>
           <option>Private office</option>
           <option>Coworking space</option>
@@ -89,7 +113,7 @@ function MeetingRoomForm() {
               value={startTime}
               onChange={handleStartTimeChange}
               min="09:00"
-              max="12:00"
+              max="18:00"
               className="time-input"
             />
           </div>
@@ -100,16 +124,22 @@ function MeetingRoomForm() {
               value={endTime}
               onChange={handleEndTimeChange}
               min="09:00"
-              max="12:00"
+              max="18:00"
               className="time-input"
             />
           </div>
         </div>
       </div>
 
-      <button className="search-button" onClick={() => alert('Search button clicked!')}>
+      <button className="search-button" onClick={handleSearch}>
         Search
       </button>
+
+      {availabilityMessage && (
+        <div className="availability-message">
+          <p>{availabilityMessage}</p>
+        </div>
+      )}
     </div>
   );
 }

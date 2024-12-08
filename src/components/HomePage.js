@@ -1,9 +1,11 @@
 import React from 'react';
-import Carousel from 'react-bootstrap/Carousel';
+
 import './HomePage.css';
 import image1 from './img/co1.jpg';
 import image2 from './img/co0.jpg';
 import image3 from './img/co2.jpg';
+import { Carousel } from 'react-bootstrap';
+
 import aboutImage from './img/about2.jpg';
 
 function HomePage() {

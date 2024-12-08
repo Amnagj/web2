@@ -1,20 +1,49 @@
 import React, { useState } from "react";
+import axios from "axios"; // Import axios
 import "./LoginPage.css";
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState(true); // true for login, false for signup
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(""); // For login and signup
+  const [mail, setMail] = useState(""); // For signup
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); // For signup
+  const [error, setError] = useState(""); // To store error messages
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    alert(`Logging in with Email: ${email}, Password: ${password}`);
+  // Login handler
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    try {
+      const response = await axios.post("/auth/login", {
+        name, // Using name for login
+        password,
+      });
+      alert("Login successful!");
+      console.log(response.data);
+      // Store JWT token in localStorage or cookies
+      localStorage.setItem("token", response.data.token);
+      // Redirect user after successful login
+      window.location.href = "/"; // Redirect to homepage or dashboard
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Error logging in";
+      setError(errorMessage);
+    }
   };
 
-  const handleSignup = (e) => {
-    e.preventDefault();
-    alert(`Creating Account for Name: ${name}, Email: ${email}, Password: ${password}`);
+  // Signup handler
+  const handleSignup = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    try {
+      const response = await axios.post("/auth/register", {
+        name,
+        mail, // For signup
+        password,
+      });
+      alert("Account created successfully!");
+      setIsLogin(true); // Switch to login form after successful signup
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Error creating account";
+      setError(errorMessage);
+    }
   };
 
   return (
@@ -24,14 +53,15 @@ function LoginPage() {
           // Login Form
           <>
             <h2>Login to Your Account</h2>
+            {error && <p className="error">{error}</p>}
             <form onSubmit={handleLogin}>
               <div className="form-group">
-                <label>Email</label>
+                <label>Name</label>
                 <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  placeholder="Enter your name"
+                  value={name} // Using name for login
+                  onChange={(e) => setName(e.target.value)} // Using name for login
                   required
                 />
               </div>
@@ -45,11 +75,17 @@ function LoginPage() {
                   required
                 />
               </div>
-              <button type="submit" className="login-button">Login</button>
+              <button type="submit" className="login-button">
+                Login
+              </button>
             </form>
             <p className="toggle-form">
               Don't have an account?{" "}
-              <button className="link-button" onClick={() => setIsLogin(false)}>
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => setIsLogin(false)}
+              >
                 Create Account
               </button>
             </p>
@@ -58,6 +94,7 @@ function LoginPage() {
           // Signup Form
           <>
             <h2>Create a New Account</h2>
+            {error && <p className="error">{error}</p>}
             <form onSubmit={handleSignup}>
               <div className="form-group">
                 <label>Name</label>
@@ -74,8 +111,8 @@ function LoginPage() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={mail}
+                  onChange={(e) => setMail(e.target.value)}
                   required
                 />
               </div>
@@ -89,11 +126,17 @@ function LoginPage() {
                   required
                 />
               </div>
-              <button type="submit" className="login-button">Sign Up</button>
+              <button type="submit" className="login-button">
+                Sign Up
+              </button>
             </form>
             <p className="toggle-form">
               Already have an account?{" "}
-              <button className="link-button" onClick={() => setIsLogin(true)}>
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => setIsLogin(true)}
+              >
                 Login
               </button>
             </p>
