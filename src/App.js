@@ -10,6 +10,8 @@ import Courses from './components/Courses';
 import ContactForm from './components/ContactForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailableRoomsPage from './components/AvailableRoomsPage';
+import AdminPanel from './components/AdminPanel';
+
 
 
 import Modal from 'react-modal';
@@ -37,6 +39,8 @@ function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/ContactForm" element={<ContactForm />} />
           <Route path="/available-rooms" element={<AvailableRoomsPage />} />
+          <Route path="/AdminPanel" element={<AdminPanel />} />
+
         </Routes>
         <Footer />
         <Modal
