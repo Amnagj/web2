@@ -1,33 +1,65 @@
-.available-rooms-page {
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  .selected {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  button {
-    padding: 10px;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .booking-confirmation {
-    margin-top: 20px;
-  }
-  
-  .cancel-button {
-    background-color: #dc3545;
-  }
-  
-  .cancel-button:hover {
-    background-color: #c82333;
-  }
-  
+/* Styles généraux pour la page des salles disponibles */
+.available-rooms {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 20px;
+}
+
+/* Styles pour chaque salle */
+.room-item {
+  background: rgba(255, 255, 255, 0.9); /* Fond blanc avec légère transparence */
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.room-item h3 {
+  font-size: 24px;
+  color: #004080; /* Couleur du texte en bleu */
+  margin-bottom: 10px;
+  font-family: 'Georgia', 'Times New Roman', Times, serif;
+  font-style: italic;
+}
+
+.room-item button {
+  background: #004080;
+  color: #fff;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 10px;
+}
+
+.room-item button:hover {
+  background: #002b59; /* Couleur plus foncée pour l'effet hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton d'annulation */
+.cancel-button {
+  background: #f3f8fc;
+  color: #004080;
+  border: 1px solid #004080;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: #004080;
+  color: #fff;
+}

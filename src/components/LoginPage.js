@@ -11,23 +11,33 @@ function LoginPage() {
 
   // Login handler
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     try {
       const response = await axios.post("/auth/login", {
-        name, // Using name for login
+        name,
         password,
       });
+  
       alert("Login successful!");
       console.log(response.data);
+  
+      const { isAdmin } = response.data; // Extract isAdmin from response
+  
       // Store JWT token in localStorage or cookies
       localStorage.setItem("token", response.data.token);
-      // Redirect user after successful login
-      window.location.href = "/"; // Redirect to homepage or dashboard
+  
+      // Redirect user based on role
+      if (isAdmin) {
+        window.location.href = "/adminpanel"; // Redirect to admin panel
+      } else {
+        window.location.href = "/homepage"; // Redirect to homepage
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Error logging in";
       setError(errorMessage);
     }
   };
+  
 
   // Signup handler
   const handleSignup = async (e) => {

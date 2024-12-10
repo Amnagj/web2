@@ -59,4 +59,36 @@
   .user-table tr:last-child td {
     border-bottom: none;
   }
+  .admin-panel {
+    padding: 20px;
+  }
+  
+  .admin-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .user-table th, .user-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .delete-button, .add-button {
+    padding: 8px 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .add-user-form {
+    margin-top: 20px;
+  }
   
