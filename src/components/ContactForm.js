@@ -1,43 +1,64 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
-import './ContactForm.css';
-import ContactForm from './ContactForm'; // Assurez-vous d'importer votre ContactForm
+import React, { useState } from "react";
 
-Modal.setAppElement('#root');
+function ContactForm() {
+    const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+    const [status, setStatus] = useState("");
 
-function Services() {
-    const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-    const openContactForm = () => setIsContactFormOpen(true);
-    const closeContactForm = () => setIsContactFormOpen(false);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:4000/api/contact/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            if (response.ok) {
+                setStatus("Message sent successfully!");
+                setFormData({ name: "", email: "", message: "" });
+            } else {
+                setStatus("Failed to send the message. Please try again.");
+            }
+        } catch (error) {
+            setStatus("Error: " + error.message);
+        }
+    };
 
     return (
-        <div className="services-section">
-            <h2>We offer creative working environments with a unique entrepreneurial spirit.</h2>
-            <div className="services-container">
-                {/* Ajoutez d'autres services ici */}
-
-                {/* Carte de service pour contacter */}
-                <div className="service-card">
-                    <h3>Contact Us</h3>
-                    <p>Have questions? Reach out to us directly through the form below.</p>
-                    <button onClick={openContactForm}>Contact Us</button>
-                </div>
-            </div>
-
-            {/* Modal pour ContactForm */}
-            <Modal
-                isOpen={isContactFormOpen}
-                onRequestClose={closeContactForm}
-                contentLabel="Contact Form"
-                className="modal-content"
-                overlayClassName="modal-overlay"
-            >
-                <button onClick={closeContactForm} className="close-modal">X</button>
-                <ContactForm />
-            </Modal>
+        <div className="contact-form">
+            <h3>Send Us Your Inquiry</h3>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                />
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                />
+                <textarea
+                    name="message"
+                    placeholder="Your Message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                ></textarea>
+                <button type="submit">Submit</button>
+            </form>
+            {status && <p>{status}</p>}
         </div>
     );
 }
 
-export default Services;
+export default ContactForm;

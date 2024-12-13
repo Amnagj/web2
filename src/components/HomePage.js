@@ -1,4 +1,5 @@
 import React from 'react';
+import ContactForm from "./ContactForm";
 
 import './HomePage.css';
 import image1 from './img/co1.jpg';
@@ -59,7 +60,7 @@ function HomePage() {
                             Whether you’re here to brainstorm your next big idea, meet with clients, or simply focus on your goals, 
                             HomeBase Co-Work is more than just a workspace – it’s a space where success happens.
                         </p>
-                        <p>Learn more about our services <a href="about.html">here</a>.</p>
+                        <p>Learn more about our services <a href="./Services.js">here</a>.</p>
                     </div>
                 </div>
             </div>
@@ -92,19 +93,11 @@ function HomePage() {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="contact-form">
-                        <h3>Send Us Your Inquiry</h3>
-                        <form>
-                            <input type="text" placeholder="First Name" required />
-                            <input type="text" placeholder="Last Name" required />
-                            <input type="email" placeholder="Email" required />
-                            <textarea placeholder="Your Message" required></textarea>
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div>
+                    <ContactForm />
+
+
                 </div>
             </div>
-            
         </div>
     );
 }

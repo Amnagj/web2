@@ -7,9 +7,12 @@ import usersRoute from "./route/user.js";
 import adminRoute from "./route/admin.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+import contactRoute from "./route/contact.js"; // Import the contact route
+import graphRoutes from './route/graph.js';
+import path from "path";
 dotenv.config();
 const app = express();
+app.use(express.json());
 
 // CORS configuration
 const corsOptions = {
@@ -21,7 +24,6 @@ app.use(cors(corsOptions)); // Utilisez les options CORS configurées
 
 // Middlewares
 app.use(cookieParser());
-app.use(express.json());
 
 // MongoDB connection
 const connect = async () => {
@@ -42,6 +44,18 @@ app.use("/api/user", usersRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/rooms", roomRoute);
 app.use("/api/admin", adminRoute);
+app.use('/api/contact', contactRoute);
+app.use('/api/graph', graphRoutes);
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+// Servir les fichiers statiques à partir du dossier public/graphs
+app.use('/graphs', express.static(path.join(__dirname, './public/graphs/graphs')));
+
+// Autres routes ici (exemple)
+app.get('/contact', (req, res) => {
+  res.send('Contact Page');
+});
+
 
 // Error-handling middleware
 app.use((err, req, res, next) => {

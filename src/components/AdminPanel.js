@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./AdminPanel.css"; // Add this CSS file for styling
-
+import "./AdminPanel.css"; // Ensure this CSS file exists for styling
+import userimg from "./img/user_repartition.jpg"
 const AdminPanel = () => {
   const [users, setUsers] = useState([]); // List of users
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const [newUser, setNewUser] = useState({ name: "", mail: "", password: "" }); // New user data
   const [success, setSuccess] = useState(null); // Success message
+  const [graphUrl, setGraphUrl] = useState(""); // URL of the graph image
 
   // Fetch users from the server
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -28,10 +28,25 @@ const AdminPanel = () => {
         setLoading(false);
       }
     };
-  
+
     fetchUsers();
   }, []);
-  
+
+  // Fetch the graph image URL
+  useEffect(() => {
+    const fetchGraph = async () => {
+      try {
+        const graphEndpoint = "http://localhost:4000/api/graph/user-repartition"; // Update the endpoint if necessary
+        setGraphUrl(graphEndpoint);
+      } catch (err) {
+        console.error("Error fetching graph:", err);
+        setError("Error loading graph.");
+      }
+    };
+
+    fetchGraph();
+  }, []);
+
   // Handle adding a new user
   const handleAddUser = async (e) => {
     e.preventDefault();
@@ -51,8 +66,10 @@ const AdminPanel = () => {
       setUsers([...users, addedUser]); // Add new user to the list
       setNewUser({ name: "", mail: "", password: "" }); // Reset form
       setSuccess("User added successfully!");
+      setError(null); // Clear any previous errors
     } catch (err) {
       setError(err.message);
+      setSuccess(null); // Clear any previous success message
     }
   };
 
@@ -70,8 +87,10 @@ const AdminPanel = () => {
       }
       setUsers(users.filter((user) => user._id !== userId)); // Remove user from the list
       setSuccess("User deleted successfully!");
+      setError(null); // Clear any previous errors
     } catch (err) {
       setError(err.message);
+      setSuccess(null); // Clear any previous success message
     }
   };
 
@@ -82,84 +101,45 @@ const AdminPanel = () => {
         {loading && <p className="loading">Loading users...</p>}
         {error && <p className="error">{error}</p>}
         {success && <p className="success">{success}</p>}
-        
+
         {/* User Table */}
         {!loading && !error && (
-          <>
-            <table className="user-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Actions</th>
+          <table className="user-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <td>{user._id}</td>
+                  <td>{user.name}</td>
+                  <td>{user.mail}</td>
+                  <td>{user.isAdmin ? "Admin" : "User"}</td>
+                  <td>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteUser(user._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id}>
-                    <td>{user._id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.mail}</td>
-                    <td>{user.isAdmin ? "Admin" : "User"}</td>
-                    <td>
-                      <button
-                        className="delete-button"
-                        onClick={() => handleDeleteUser(user._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Add User Form */}
-            <div className="add-user-form">
-              <h2>Add New User</h2>
-              <form onSubmit={handleAddUser}>
-                <div className="form-group">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    value={newUser.name}
-                    onChange={(e) =>
-                      setNewUser({ ...newUser, name: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    value={newUser.mail}
-                    onChange={(e) =>
-                      setNewUser({ ...newUser, mail: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    value={newUser.password}
-                    onChange={(e) =>
-                      setNewUser({ ...newUser, password: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-                <button type="submit" className="add-button">
-                  Add User
-                </button>
-              </form>
-            </div>
-          </>
+              ))}
+            </tbody>
+          </table>
         )}
+
+        {/* Graph Section */}
+        <div className="charts">
+          <h2>User Repartition Graph</h2>
+          <img src={userimg} alt="Icone du service 1" />
+        </div>
       </div>
     </div>
   );

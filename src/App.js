@@ -14,6 +14,7 @@ import AdminPanel from './components/AdminPanel';
 
 
 
+
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -59,4 +60,3 @@ function App() {
 }
 
 export default App;
-
