@@ -99,7 +99,6 @@ def generate_room_occupancy_graph():
     room_occupancy_rate_path = os.path.join(base_path, "./room_occupancy_rate.jpg")
     plt.savefig(room_occupancy_rate_path)
     plt.close()
-
 # Fonction pour surveiller les changements
 def watch_changes():
     try:
