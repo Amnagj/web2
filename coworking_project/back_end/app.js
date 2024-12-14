@@ -74,3 +74,4 @@ app.listen(4000, () => {
   connect();
   console.log("Connected to backend.");
 });
+// Route to get the email of the last logged-in user

@@ -11,8 +11,7 @@ import ContactForm from './components/ContactForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AvailableRoomsPage from './components/AvailableRoomsPage';
 import AdminPanel from './components/AdminPanel';
-
-
+import dashboard from './components/dashboard.js';
 
 
 import Modal from 'react-modal';
@@ -41,6 +40,7 @@ function App() {
           <Route path="/ContactForm" element={<ContactForm />} />
           <Route path="/available-rooms" element={<AvailableRoomsPage />} />
           <Route path="/AdminPanel" element={<AdminPanel />} />
+          <Route path="/dashboard" element={<dashboard />} />
 
         </Routes>
         <Footer />

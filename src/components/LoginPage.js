@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./LoginPage.css";
+import emailjs from 'emailjs-com';
 
 function LoginPage() {
   const [isLogin, setIsLogin] = useState(true); // true for login, false for signup
@@ -10,9 +11,16 @@ function LoginPage() {
   const [error, setError] = useState(""); // To store error messages
   const [nameError, setNameError] = useState(""); // Error for name validation
   const [passwordError, setPasswordError] = useState(""); // Error for password validation
+  const [verificationCode, setVerificationCode] = useState(""); // Code généré
+  const [isCodeSent, setIsCodeSent] = useState(false); // Pour afficher la vérification
+  const [generatedCode, setGeneratedCode] = useState(""); // Stocke le code envoyé par e-mail
+
+  const generateCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString(); // Code à 6 chiffres
+  };
 
   const validateName = (name) => {
-    const hasNumbers = /\d/; // Vérifie s'il y a des chiffres
+    const hasNumbers = /\d/; // Check for numbers
     if (hasNumbers.test(name)) {
       return "Name should not contain numbers.";
     }
@@ -23,10 +31,10 @@ function LoginPage() {
   };
 
   const validatePassword = (password) => {
-    const hasUppercase = /[A-Z]/; // Au moins une lettre majuscule
-    const hasLowercase = /[a-z]/; // Au moins une lettre minuscule
-    const hasNumber = /\d/; // Au moins un chiffre
-    const hasSpecialChar = /[@$!%*?&]/; // Au moins un caractère spécial
+    const hasUppercase = /[A-Z]/; // At least one uppercase letter
+    const hasLowercase = /[a-z]/; // At least one lowercase letter
+    const hasNumber = /\d/; // At least one digit
+    const hasSpecialChar = /[@$!%*?&]/; // At least one special character
     if (password.length < 8) {
       return "Password must be at least 8 characters long.";
     }
@@ -56,6 +64,8 @@ function LoginPage() {
 
       // Redirect user based on role
       window.location.href = isAdmin ? "/adminpanel" : "/homepage";
+          window.location.href = "/home";  // Change this to redirect to your desired home page
+
     } catch (err) {
       setError(err.response?.data?.message || "Error logging in");
     }
@@ -63,6 +73,10 @@ function LoginPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    // Génération du code de vérification
+    const code = generateCode();
+    setGeneratedCode(code);
+    setVerificationCode(""); // Clear the verification input field
 
     // Validation
     const nameValidationError = validateName(name);
@@ -74,11 +88,40 @@ function LoginPage() {
     }
 
     try {
-      const response = await axios.post("/auth/register", { name, mail, password });
+      await axios.post("/auth/register", { name, mail, password });
       alert("Account created successfully!");
-      setIsLogin(true); // Switch to login form after successful signup
+      setIsCodeSent(true); // Show the verification form after signup
+
+      const templateParams = {
+        name: name, // User's name
+        to_email: mail, // User's email
+        verification_code: code, // Replace with your verification link
+      };
+
+      emailjs
+        .send("service_a2pxinv", "template_4mp49ha", templateParams, "JTKLPSKurLIfVlKKZ")
+        .then(
+          (response) => {
+            console.log("Email sent successfully:", response.status, response.text);
+            alert("A verification code has been sent to your email.");
+          },
+          (error) => {
+            console.error("Failed to send email:", error);
+            alert("Failed to send the verification code. Please try again.");
+          }
+        );
     } catch (err) {
       setError(err.response?.data?.message || "Error creating account");
+    }
+  };
+
+  const handleVerification = (e) => {
+    e.preventDefault();
+    if (verificationCode === generatedCode) {
+      alert("Account verified successfully!");
+      setIsLogin(true); // Return to the login page after successful verification
+    } else {
+      setError("Invalid verification code. Please try again.");
     }
   };
 
@@ -120,6 +163,26 @@ function LoginPage() {
                 Create Account
               </button>
             </p>
+          </>
+        ) : isCodeSent ? (
+          <>
+            <h2>Email Verification</h2>
+            {error && <p style={{ fontSize: "0.75rem", color: "#d9534f", marginTop: "5px" }}>{error}</p>}
+            <form onSubmit={handleVerification}>
+              <div className="form-group">
+                <label>Verification Code</label>
+                <input
+                  type="text"
+                  placeholder="Enter the verification code"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  required
+                />
+              </div>
+              <button type="submit" className="login-button">
+                Verify
+              </button>
+            </form>
           </>
         ) : (
           <>

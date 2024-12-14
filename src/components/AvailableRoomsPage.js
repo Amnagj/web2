@@ -1,27 +1,49 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import emailjs from 'emailjs-com';
 
 function AvailableRooms() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { rooms } = location.state || { rooms: [] };
+  const { rooms, selectedDate, startTime, endTime } = location.state || { rooms: [] };
 
-  const handleBookRoom = async (roomId, date, startTime, endTime) => {
+  const handleBookRoom = async (roomId) => {
     try {
+      // Sending booking request to backend
       const response = await axios.post('/rooms/book', {
         roomId,
-        date,
+        date: selectedDate,
         startTime,
         endTime,
       });
-      alert('Room booked successfully');
+  
+      // Send confirmation email using EmailJS
+      const emailParams = {
+        user_email: 'goujaamna8@gmail.com', // Static email for sending confirmation
+        room_type: response.data.roomType, // Type of the booked room
+        booking_date: selectedDate,
+        start_time: startTime,
+        end_time: endTime,
+      };
+  
+      const emailResponse = await emailjs.send(
+        'service_byoycp1',   // EmailJS Service ID
+        'template_yzlu1ff',  // EmailJS Template ID
+        emailParams,
+        'UgSv3HmumcYideAxo'  // EmailJS User ID
+      );
+  
+      console.log('Email sent successfully: ', emailResponse);
+      alert('Room booked successfully. A confirmation email has been sent!');
       navigate('/home');
     } catch (error) {
-      alert('Error booking the room');
-      console.error(error);
+      console.error('Error during booking or sending email: ', error);
+      alert('Error booking the room or sending confirmation email');
     }
   };
+  
+  
 
   const handleCancel = () => {
     navigate('/home');
@@ -111,7 +133,7 @@ function AvailableRooms() {
               </h3>
               <button
                 style={styles.button}
-                onClick={() => handleBookRoom(room._id, '2024-12-12', '09:00', '10:00')}
+                onClick={() => handleBookRoom(room._id)} // Handle room booking dynamically
               >
                 Book this room
               </button>
