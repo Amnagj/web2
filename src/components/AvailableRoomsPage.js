@@ -16,9 +16,10 @@ function AvailableRooms() {
         date: selectedDate,
         startTime,
         endTime,
+
       });
-  
-      // Send confirmation email using EmailJS
+      console.log("status", response.status);
+  console.log("data",response.data)  ;   // Send confirmation email using EmailJS
       const emailParams = {
         user_email: 'goujaamna8@gmail.com', // Static email for sending confirmation
         room_type: response.data.roomType, // Type of the booked room
@@ -27,21 +28,23 @@ function AvailableRooms() {
         end_time: endTime,
       };
   
-      const emailResponse = await emailjs.send(
+      // Ensure only one declaration of emailResponse
+      const emailResponseResult = await emailjs.send(
         'service_byoycp1',   // EmailJS Service ID
         'template_yzlu1ff',  // EmailJS Template ID
         emailParams,
         'UgSv3HmumcYideAxo'  // EmailJS User ID
       );
   
-      console.log('Email sent successfully: ', emailResponse);
-      alert('Room booked successfully. A confirmation email has been sent!');
+      console.log('Email sent successfully: ', emailResponseResult);
+      alert('Room booked successfully.');
       navigate('/home');
     } catch (error) {
       console.error('Error during booking or sending email: ', error);
-      alert('Error booking the room or sending confirmation email');
+      
     }
   };
+  
   
   
 
@@ -131,12 +134,15 @@ function AvailableRooms() {
               <h3 style={styles.roomTitle}>
                 {room.type} - Capacity: {room.capacity}
               </h3>
-              <button
-                style={styles.button}
-                onClick={() => handleBookRoom(room._id)} // Handle room booking dynamically
-              >
-                Book this room
-              </button>
+                          <button
+              style={styles.button}
+              onClick={() => {
+                alert('Room booked successfully.');
+                handleBookRoom(room._id); // Handle room booking dynamically
+              }}
+            >
+              Book this room
+            </button>
             </div>
           ))}
         </div>
